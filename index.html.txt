@@ -1,1 +1,34 @@
-<H1>hello</H1>
+sRetStr="";
+oDictQuoteType=dict("string");
+sStatus="";
+oDictSCStatus=dict("string");
+oDictRCStatus=dict("string");
+if(quoteType_quote=="scopeChangeAndRecertification"){
+	for line in transactionLine{
+		if(not(line.recertFlg_quote) and line._model_name<>""){
+			put(oDictQuoteType,line._document_number,line.quoteType_line);
+		}
+	}
+	for line in transactionLine{
+		if(line._model_name=="" and not(line.recertFlg_quote) and get(oDictQuoteType,line._parent_doc_number)=="scopeChange"){
+				if(line.statusReverseSync_line<>"Done" and line.statusReverseSync_line<>"Not Applicable"){
+					sRetStr=sRetStr+line._document_number+"~statusReverseSync_line~Initiated"+"|";
+				}
+				else{
+					sRetStr=sRetStr+line._document_number+"~statusReverseSync_line~Not Applicable"+"|";
+					sRetStr=sRetStr+line._document_number+"~isDone_line~Yes"+"|";
+				}
+		}
+		elif(line._model_name=="" and not(line.recertFlg_quote) and get(oDictQuoteType,line._parent_doc_number)=="recertification"){
+			if((line.schemeName=="Initial Audit") or (line.schemeName=="Document Review & Initial Visit") or (line.schemeName=="Document Review") or (line.schemeName=="Initial Visit")){
+				sRetStr=sRetStr+line._document_number+"~statusReverseSync_line~Not Applicable"+"|";
+				sRetStr=sRetStr+line._document_number+"~isDone_line~Yes"+"|";
+			}
+			else{
+				sRetStr=sRetStr+line._document_number+"~statusReverseSync_line~Initiated"+"|";
+			}
+		}
+	}
+}
+
+return sRetStr;
