@@ -8,6 +8,7 @@ if(quoteType_quote=="scopeChangeAndRecertification"){
 		if(not(line.recertFlg_quote) and line._model_name<>""){
 			put(oDictQuoteType,line._document_number,line.quoteType_line);
 		}
+
 if(not(line.recertFlg_quote) and line._model_name<>""){
 			put(oDictQuoteType,line._document_number,line.quoteType_line);
 		}
